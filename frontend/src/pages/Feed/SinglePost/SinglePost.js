@@ -13,7 +13,7 @@ class SinglePost extends Component {
   };
 
   componentDidMount() {
-    const postId = this.props.match.params.postId;
+    const postId = this.props.params.postId;
     fetch('http://localhost:8080/feed/post/'+postId)
       .then(res => {
         if (res.status !== 200) {
@@ -25,6 +25,7 @@ class SinglePost extends Component {
         this.setState({
           title: resData.post.title,
           author: resData.post.creator.name,
+          image: 'http://localhost:8080/' + resData.post.imageUrl,
           date: new Date(resData.post.createdAt).toLocaleDateString('en-US'),
           content: resData.post.content
         });

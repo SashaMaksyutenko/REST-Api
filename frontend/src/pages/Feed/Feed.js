@@ -85,7 +85,6 @@ class Feed extends Component {
   newPostHandler = () => {
     this.setState({ isEditing: true });
   };
-
   startEditPostHandler = postId => {
     this.setState(prevState => {
       const loadedPost = { ...prevState.posts.find(p => p._id === postId) };
@@ -96,31 +95,26 @@ class Feed extends Component {
       };
     });
   };
-
   cancelEditHandler = () => {
     this.setState({ isEditing: false, editPost: null });
   };
-
   finishEditHandler = postData => {
     this.setState({
       editLoading: true
     });
     // Set up data (with image!)
+    const formData=new FormData();
+    formData.append('title', postData.title);
+    formData.append('content', postData.content);
+    formData.append('image', postData.image);
     let url = 'http://localhost:8080/feed/post';
     let method='POST';
     if (this.state.editPost) {
       url = 'URL';
     }
-
     fetch(url,{
       method:method,
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({
-        title:postData.title,
-        content:postData.content
-      })
+      body:formData
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
