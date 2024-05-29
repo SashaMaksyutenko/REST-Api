@@ -46,14 +46,18 @@ app.use((error, req, res, next) => {
   console.log(error)
   const status = error.statusCode
   const message = error.message
-  const data=error.data
-  res.status(status).json({ message: message,data:data })
+  const data = error.data
+  res.status(status).json({ message: message, data: data })
 })
 mongoose
   .connect(
     'mongodb+srv://sashamaksyutenko:7Alm9KVFRzXGBjzR@cluster0.jevii2h.mongodb.net/postsApp?retryWrites=true&w=majority&appName=Cluster0'
   )
-  .then(() => {
-    app.listen(8080)
+  .then((result) => {
+    const server=app.listen(8080)
+    const io = require("./socket").init(server);
+    io.on('connection',socket=>{
+      console.log('client connected')
+    })
   })
   .catch(err => console.log(err))
